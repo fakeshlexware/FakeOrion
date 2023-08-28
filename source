@@ -526,7 +526,7 @@ function Library:MakeWindow(windowData)
 			LabelIcon_1.BorderSizePixel = 0
 			LabelIcon_1.Position = UDim2.new(0.901818156, 0,0.166670576, 0)
 			LabelIcon_1.Size = UDim2.new(0, 20,0, 17)
-			LabelIcon_1.Image = "rbxassetid://14600209347"
+			LabelIcon_1.Image = ""
 
 			LabelText_1.Name = "LabelText"
 			LabelText_1.Parent = LabelFrame_1
