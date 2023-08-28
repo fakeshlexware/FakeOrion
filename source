@@ -7,8 +7,8 @@ local profilePictureUrl = string.format("https://www.roblox.com/headshot-thumbna
 local TweenService = game:GetService("TweenService")
 
 	
-local FakeOrionLib = {}
-function FakeOrionLib:MakeWindow(windowData)
+local Library = {}
+function Library:MakeWindow(windowData)
 	if game.CoreGui:FindFirstChild("FakeOrion") then
 		game.CoreGui:FindFirstChild("FakeOrion"):Destroy()
 	end
