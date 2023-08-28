@@ -88,7 +88,6 @@ Tab:AddSlider({
         
     end
 })
-})
 
 --[[
 Name = <string> - The name of the slider.
