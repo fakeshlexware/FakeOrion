@@ -1256,7 +1256,4 @@ function Library:MakeWindow(windowData)
 	end
 	return Tabs
 end
-
-local Window = Library:MakeWindow({Name = "Fake Orion Hub!"})
-
 return Library
