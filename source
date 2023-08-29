@@ -2,11 +2,13 @@ local UserInputService = game:GetService("UserInputService")
 local player = game.Players.LocalPlayer
 local userId = player.UserId
 
+local Open = true
+
 local profilePictureUrl = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420", userId)
 
 local TweenService = game:GetService("TweenService")
 
-	
+
 local Library = {}
 function Library:MakeWindow(windowData)
 	if game.CoreGui:FindFirstChild("FakeOrion") then
@@ -20,10 +22,12 @@ function Library:MakeWindow(windowData)
 	local Title_1 = Instance.new("TextLabel")
 	local UIPadding_1 = Instance.new("UIPadding")
 	local TopBarLine_1 = Instance.new("Frame")
-	local Close_1 = Instance.new("Frame")
+	local CloseMinimize_1 = Instance.new("Frame")
 	local UICorner_3 = Instance.new("UICorner")
 	local UIStroke_1 = Instance.new("UIStroke")
 	local CloseBtn_1 = Instance.new("TextButton")
+	local MinimizeBtn_1 = Instance.new("TextButton")
+	local ActionSplitter_1 = Instance.new("Frame")
 	local TabsHolder_1 = Instance.new("Frame")
 	local ProfileHolder_1 = Instance.new("Frame")
 	local ProfileHolderCorner_1 = Instance.new("Frame")
@@ -42,68 +46,63 @@ function Library:MakeWindow(windowData)
 	local UIListLayout_1 = Instance.new("UIListLayout")
 	local UIPadding_3 = Instance.new("UIPadding")
 
-	local targetCloseOnColor = Color3.fromRGB(180,180,180)
-	local targetCloseOffColor = Color3.fromRGB(47,47,47)
-	local tweenInfoClose = TweenInfo.new(0.2)
-	local targetCloseOn = TweenService:Create(Close_1, tweenInfoClose, {BackgroundColor3 = targetCloseOnColor})
-	local targetCloseOff = TweenService:Create(Close_1, tweenInfoClose, {BackgroundColor3 = targetCloseOffColor})
 	local targetPositionClose = UDim2.new(0.5, 0, 1.5, 0)
 	local tweenInfoClose = TweenInfo.new(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
 	local tweenClose = TweenService:Create(Main_1, tweenInfoClose, { Position = targetPositionClose })
-	
+
 	FakeOrion.Name = "FakeOrion"
 	FakeOrion.Parent = game.CoreGui
 	FakeOrion.Enabled = true
 
 	Main_1.Name = "Main"
 	Main_1.Parent = FakeOrion
-	Main_1.AnchorPoint = Vector2.new(0.5, 0.5)
+	Main_1.AnchorPoint = Vector2.new(0,0)
 	Main_1.BackgroundColor3 = Color3.fromRGB(36,36,36)
 	Main_1.BorderColor3 = Color3.fromRGB(0,0,0)
 	Main_1.BorderSizePixel = 0
-	Main_1.Position = UDim2.new(0.5, 0, 0.5, 0)
+	Main_1.Position = UDim2.new(0,0,0,0)
 	Main_1.Size = UDim2.new(0, 414,0, 245)
 	Main_1.Active = true
 
-        local gui = Main_1
+	local gui = Main_1
 
-        local dragging
-        local dragInput
-        local dragStart
-        local startPos
+	local dragging
+	local dragInput
+	local dragStart
+	local startPos
 
-        local function update(input)
-        	local delta = input.Position - dragStart
-        	gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-        end
+	local function update(input)
+		local delta = input.Position - dragStart
+		gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	end
 
-        gui.InputBegan:Connect(function(input)
-        	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        		dragging = true
-        		dragStart = input.Position
-        		startPos = gui.Position
-        		
-        		input.Changed:Connect(function()
-        			if input.UserInputState == Enum.UserInputState.End then
-        				dragging = false
-        			end
-        		end)
-        	end
-        end)
+	gui.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = gui.Position
 
-        gui.InputChanged:Connect(function(input)
-        	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        		dragInput = input
-        	end
-        end)
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
 
-        UserInputService.InputChanged:Connect(function(input)
-        	if input == dragInput and dragging then
-        		update(input)
-        	end
-        end)
-        
-        
+	gui.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			update(input)
+		end
+	end)
+
+
 
 	UICorner_1.Parent = Main_1
 	UICorner_1.CornerRadius = UDim.new(0,9)
@@ -143,43 +142,95 @@ function Library:MakeWindow(windowData)
 	TopBarLine_1.Position = UDim2.new(0, 0,0.973684192, 0)
 	TopBarLine_1.Size = UDim2.new(0, 414,0, 1)
 
-	Close_1.Name = "Close"
-	Close_1.Parent = TopBar_1
-	Close_1.BackgroundColor3 = Color3.fromRGB(47,47,47)
-	Close_1.BorderColor3 = Color3.fromRGB(0,0,0)
-	Close_1.BorderSizePixel = 0
-	Close_1.Position = UDim2.new(0.910628021, 0,0.184210524, 0)
-	Close_1.Size = UDim2.new(0, 28,0, 24)
+	CloseMinimize_1.Name = "CloseMinimize"
+	CloseMinimize_1.Parent = TopBar_1
+	CloseMinimize_1.BackgroundColor3 = Color3.fromRGB(47,47,47)
+	CloseMinimize_1.BorderColor3 = Color3.fromRGB(0,0,0)
+	CloseMinimize_1.BorderSizePixel = 0
+	CloseMinimize_1.Position = UDim2.new(0.847826064, 0,0.184210524, 0)
+	CloseMinimize_1.Size = UDim2.new(0, 54,0, 24)
 
-	UICorner_3.Parent = Close_1
+	UICorner_3.Parent = CloseMinimize_1
+	UICorner_3.CornerRadius = UDim.new(0,6)
 
-	UIStroke_1.Parent = Close_1
+	UIStroke_1.Parent = CloseMinimize_1
 	UIStroke_1.Color = Color3.fromRGB(81,81,81)
 	UIStroke_1.Thickness = 1
 
 	CloseBtn_1.Name = "CloseBtn"
-	CloseBtn_1.Parent = Close_1
+	CloseBtn_1.Parent = CloseMinimize_1
 	CloseBtn_1.Active = true
 	CloseBtn_1.AnchorPoint = Vector2.new(0.5, 0.5)
 	CloseBtn_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
 	CloseBtn_1.BackgroundTransparency = 1
 	CloseBtn_1.BorderColor3 = Color3.fromRGB(0,0,0)
 	CloseBtn_1.BorderSizePixel = 0
-	CloseBtn_1.Position = UDim2.new(0.5, 0,0.5, 0)
+	CloseBtn_1.Position = UDim2.new(0.759259284, 0,0.5, 0)
 	CloseBtn_1.Size = UDim2.new(0, 28,0, 24)
 	CloseBtn_1.Font = Enum.Font.Gotham
 	CloseBtn_1.Text = "X"
 	CloseBtn_1.TextColor3 = Color3.fromRGB(255,255,255)
 	CloseBtn_1.TextSize = 14
 	CloseBtn_1.MouseButton1Click:Connect(function()
-		targetCloseOn:Play()
-		wait(0.1)	
-		targetCloseOff:Play()
-		wait(0.1)	
 		tweenClose:Play()
 		wait(2)
 		FakeOrion.Enabled = false
 	end)
+
+	
+	MinimizeBtn_1.Name = "MinimizeBtn"
+	MinimizeBtn_1.Parent = CloseMinimize_1
+	MinimizeBtn_1.Active = true
+	MinimizeBtn_1.AnchorPoint = Vector2.new(0.5, 0.5)
+	MinimizeBtn_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
+	MinimizeBtn_1.BackgroundTransparency = 1
+	MinimizeBtn_1.BorderColor3 = Color3.fromRGB(0,0,0)
+	MinimizeBtn_1.BorderSizePixel = 0
+	MinimizeBtn_1.Position = UDim2.new(0.259259254, 0,0.5, 0)
+	MinimizeBtn_1.Size = UDim2.new(0, 28,0, 24)
+	MinimizeBtn_1.Font = Enum.Font.Gotham
+	MinimizeBtn_1.Text = "━"
+	MinimizeBtn_1.TextColor3 = Color3.fromRGB(255,255,255)
+	MinimizeBtn_1.TextSize = 14
+	MinimizeBtn_1.MouseButton1Click:Connect(function()
+		if Open == true then
+			TopBarLine_1.Visible = false
+			ElementsHolder_1.Visible = false
+			MainLine_1.Visible = false
+			ProfileHolder_1.Visible = false
+			TabsHolder_1.Visible = false
+			local TweenClose = Main_1:TweenSize(
+				UDim2.new(0, 414,0, 38),
+				Enum.EasingDirection.Out,
+				Enum.EasingStyle.Quad,
+				0.2,
+				false
+			)
+			Open = false
+		else
+			local TweenOpen = Main_1:TweenSize(
+				UDim2.new(0, 414,0, 245),
+				Enum.EasingDirection.Out,
+				Enum.EasingStyle.Quad,
+				0.2,
+				false
+			)
+			wait(0.2)
+			TopBarLine_1.Visible = true
+			ElementsHolder_1.Visible = true
+			MainLine_1.Visible = true
+			ProfileHolder_1.Visible = true
+			TabsHolder_1.Visible = true
+			Open = true
+		end
+	end)
+	ActionSplitter_1.Name = "ActionSplitter"
+	ActionSplitter_1.Parent = CloseMinimize_1
+	ActionSplitter_1.BackgroundColor3 = Color3.fromRGB(81,81,81)
+	ActionSplitter_1.BorderColor3 = Color3.fromRGB(0,0,0)
+	ActionSplitter_1.BorderSizePixel = 0
+	ActionSplitter_1.Position = UDim2.new(0.5, 0,0, 0)
+	ActionSplitter_1.Size = UDim2.new(0, 1,0, 24)
 
 	TabsHolder_1.Name = "TabsHolder"
 	TabsHolder_1.Parent = Main_1
@@ -502,7 +553,7 @@ function Library:MakeWindow(windowData)
 			local LabelIcon_1 = Instance.new("ImageLabel")
 			local LabelText_1 = Instance.new("TextLabel")
 			local UIPadding_13 = Instance.new("UIPadding")
-			
+
 			LabelFrame_1.Name = "LabelFrame"
 			LabelFrame_1.Parent = ScrollingFrame_1
 			LabelFrame_1.BackgroundColor3 = Color3.fromRGB(47,47,47)
@@ -517,16 +568,6 @@ function Library:MakeWindow(windowData)
 
 			UICorner_16.Parent = LabelFrame_1
 			UICorner_16.CornerRadius = UDim.new(0,6)
-
-			LabelIcon_1.Name = "LabelIcon"
-			LabelIcon_1.Parent = LabelFrame_1
-			LabelIcon_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
-			LabelIcon_1.BackgroundTransparency = 1
-			LabelIcon_1.BorderColor3 = Color3.fromRGB(0,0,0)
-			LabelIcon_1.BorderSizePixel = 0
-			LabelIcon_1.Position = UDim2.new(0.901818156, 0,0.166670576, 0)
-			LabelIcon_1.Size = UDim2.new(0, 20,0, 17)
-			LabelIcon_1.Image = "rbxassetid://14600209347"
 
 			LabelText_1.Name = "LabelText"
 			LabelText_1.Parent = LabelFrame_1
@@ -548,13 +589,13 @@ function Library:MakeWindow(windowData)
 			UIPadding_13.PaddingLeft = UDim.new(0,8)
 		end
 		function Elements:AddButton(buttonData)
-    buttonData.Callback = buttonData.Callback or function()
-    end
+			buttonData.Callback = buttonData.Callback or function()
+			end
 
-    local targetButtonColorOn = Color3.fromRGB(110, 110, 110)
-    local targetButtonColorOff = Color3.fromRGB(47, 47, 47)
+			local targetButtonColorOn = Color3.fromRGB(110, 110, 110)
+			local targetButtonColorOff = Color3.fromRGB(47, 47, 47)
 
-    local ButtonFrame_1 = Instance.new("Frame")
+			local ButtonFrame_1 = Instance.new("Frame")
 			local UIStroke_3 = Instance.new("UIStroke")
 			local UICorner_6 = Instance.new("UICorner")
 			local ButtonBtn_1 = Instance.new("TextButton")
@@ -620,7 +661,7 @@ function Library:MakeWindow(windowData)
 		end
 		function Elements:AddToggle(toggleData)
 			toggleData.Callback = toggleData.Callback or function()
-    end
+			end
 
 			local toggled = toggleData.Default or false
 			local debounce = false
@@ -705,14 +746,14 @@ function Library:MakeWindow(windowData)
 			local tweenticon = TweenService:Create(ImageLabel_2, tweenInfo, {ImageColor3 = targetToggleIconOn})
 
 
-if toggled then
-        tweentcon:Play()
-        tweenticon:Play()
-    else
-        tweentcoff:Play()
-							tweenticoff:Play()
-    end
-    
+			if toggled then
+				tweentcon:Play()
+				tweenticon:Play()
+			else
+				tweentcoff:Play()
+				tweenticoff:Play()
+			end
+
 			ToggleBtn_2.MouseButton1Click:Connect(
 				function()
 					if debounce == false then
@@ -737,10 +778,10 @@ if toggled then
 
 		end
 		function Elements:AddSlider(sliderData)
-    sliderData.Callback = sliderData.Callback or function()
-    end
+			sliderData.Callback = sliderData.Callback or function()
+			end
 
-    local SliderFrame_1 = Instance.new("Frame")
+			local SliderFrame_1 = Instance.new("Frame")
 			local UIStroke_6 = Instance.new("UIStroke")
 			local UICorner_11 = Instance.new("UICorner")
 			local SliderName_1 = Instance.new("TextLabel")
@@ -753,7 +794,7 @@ if toggled then
 			local UICorner_13 = Instance.new("UICorner")
 			local ValueName_1 = Instance.new("TextLabel")
 			local UIPadding_10 = Instance.new("UIPadding")
-			
+
 			SliderFrame_1.Name = "SliderFrame"
 			SliderFrame_1.Parent = ScrollingFrame_1
 			SliderFrame_1.BackgroundColor3 = Color3.fromRGB(47,47,47)
@@ -845,20 +886,20 @@ if toggled then
 			UIPadding_10.PaddingLeft = UDim.new(0,9)
 			local isDragging = false
 
-    SliderBtn_1.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-            isDragging = true
-        end
-    end)
+			SliderBtn_1.InputBegan:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+					isDragging = true
+				end
+			end)
 
-    game:GetService("UserInputService").InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-            isDragging = false
-        end
-    end)
+			game:GetService("UserInputService").InputEnded:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+					isDragging = false
+				end
+			end)
 
-    game:GetService("RunService").RenderStepped:Connect(function()
-        if isDragging then
+			game:GetService("RunService").RenderStepped:Connect(function()
+				if isDragging then
 					local mousePosition = game:GetService("UserInputService"):GetMouseLocation()
 					local sliderPosition = SliderBtn_1.AbsolutePosition
 					local sliderWidth = SliderBtn_1.AbsoluteSize.X
@@ -877,8 +918,8 @@ if toggled then
 			end)
 		end
 		function Elements:AddTextbox(boxData)
-		boxData.Callback = boxData.Callback or function()
-    end
+			boxData.Callback = boxData.Callback or function()
+			end
 			local BoxFrame_1 = Instance.new("Frame")
 			local UIStroke_8 = Instance.new("UIStroke")
 			local UICorner_14 = Instance.new("UICorner")
@@ -953,259 +994,259 @@ if toggled then
 			TextBox_1.Text = ""
 			TextBox_1.TextColor3 = Color3.fromRGB(255,255,255)
 			TextBox_1.TextSize = 11
-			
+
 			TextBox_1.FocusLost:Connect(function()
-            	boxData.Callback(TextBox_1.Text)
-     	   end)
+				boxData.Callback(TextBox_1.Text)
+			end)
 		end
 		function Elements:AddDropDown(dropdownData)
-    local DropDownFrame = Instance.new("Frame")
-local UIStroke_1 = Instance.new("UIStroke")
-local UICorner_1 = Instance.new("UICorner")
-local DropDownTopHolder_1 = Instance.new("Frame")
-local DropDownBtn_1 = Instance.new("ImageButton")
-local DropDownText_1 = Instance.new("TextLabel")
-local UIPadding_1 = Instance.new("UIPadding")
-local SelectedItemText_1 = Instance.new("TextLabel")
-local UIPadding_2 = Instance.new("UIPadding")
-local Line_1 = Instance.new("Frame")
-local UICorner_2 = Instance.new("UICorner")
-local UIStroke_2 = Instance.new("UIStroke")
-local ItemsFrameHolder_1 = Instance.new("Frame")
-local ItemsFrame_1 = Instance.new("ScrollingFrame")
-local OptionFrame_1 = Instance.new("Frame")
-local OptionButton_1 = Instance.new("TextButton")
-local UIPadding_3 = Instance.new("UIPadding")
-local UIListLayout_1 = Instance.new("UIListLayout")
-local UIPadding_4 = Instance.new("UIPadding")
+			local DropDownFrame = Instance.new("Frame")
+			local UIStroke_1 = Instance.new("UIStroke")
+			local UICorner_1 = Instance.new("UICorner")
+			local DropDownTopHolder_1 = Instance.new("Frame")
+			local DropDownBtn_1 = Instance.new("ImageButton")
+			local DropDownText_1 = Instance.new("TextLabel")
+			local UIPadding_1 = Instance.new("UIPadding")
+			local SelectedItemText_1 = Instance.new("TextLabel")
+			local UIPadding_2 = Instance.new("UIPadding")
+			local Line_1 = Instance.new("Frame")
+			local UICorner_2 = Instance.new("UICorner")
+			local UIStroke_2 = Instance.new("UIStroke")
+			local ItemsFrameHolder_1 = Instance.new("Frame")
+			local ItemsFrame_1 = Instance.new("ScrollingFrame")
+			local OptionFrame_1 = Instance.new("Frame")
+			local OptionButton_1 = Instance.new("TextButton")
+			local UIPadding_3 = Instance.new("UIPadding")
+			local UIListLayout_1 = Instance.new("UIListLayout")
+			local UIPadding_4 = Instance.new("UIPadding")
 
--- Properties:
-DropDownFrame.Name = "DropDownFrame"
-DropDownFrame.Parent = ScrollingFrame_1
-DropDownFrame.ClipsDescendants = true
-DropDownFrame.BackgroundColor3 = Color3.fromRGB(47,47,47)
-DropDownFrame.BorderColor3 = Color3.fromRGB(0,0,0)
-DropDownFrame.BorderSizePixel = 0
-DropDownFrame.Position = UDim2.new(0.0809859186, 0,0.252577305, 0)
-DropDownFrame.Size = UDim2.new(0, 275,0, 30)
+			-- Properties:
+			DropDownFrame.Name = "DropDownFrame"
+			DropDownFrame.Parent = ScrollingFrame_1
+			DropDownFrame.ClipsDescendants = true
+			DropDownFrame.BackgroundColor3 = Color3.fromRGB(47,47,47)
+			DropDownFrame.BorderColor3 = Color3.fromRGB(0,0,0)
+			DropDownFrame.BorderSizePixel = 0
+			DropDownFrame.Position = UDim2.new(0.0809859186, 0,0.252577305, 0)
+			DropDownFrame.Size = UDim2.new(0, 275,0, 30)
 
-UIStroke_1.Parent = DropDownFrame
-UIStroke_1.Color = Color3.fromRGB(81,81,81)
-UIStroke_1.Thickness = 1
+			UIStroke_1.Parent = DropDownFrame
+			UIStroke_1.Color = Color3.fromRGB(81,81,81)
+			UIStroke_1.Thickness = 1
 
-UICorner_1.Parent = DropDownFrame
-UICorner_1.CornerRadius = UDim.new(0,6)
+			UICorner_1.Parent = DropDownFrame
+			UICorner_1.CornerRadius = UDim.new(0,6)
 
-DropDownTopHolder_1.Name = "DropDownTopHolder"
-DropDownTopHolder_1.Parent = DropDownFrame
-DropDownTopHolder_1.BackgroundColor3 = Color3.fromRGB(47,47,47)
-DropDownTopHolder_1.BackgroundTransparency = 0
-DropDownTopHolder_1.BorderColor3 = Color3.fromRGB(0,0,0)
-DropDownTopHolder_1.BorderSizePixel = 0
-DropDownTopHolder_1.Size = UDim2.new(0, 275,0, 30)
+			DropDownTopHolder_1.Name = "DropDownTopHolder"
+			DropDownTopHolder_1.Parent = DropDownFrame
+			DropDownTopHolder_1.BackgroundColor3 = Color3.fromRGB(47,47,47)
+			DropDownTopHolder_1.BackgroundTransparency = 0
+			DropDownTopHolder_1.BorderColor3 = Color3.fromRGB(0,0,0)
+			DropDownTopHolder_1.BorderSizePixel = 0
+			DropDownTopHolder_1.Size = UDim2.new(0, 275,0, 30)
 
-DropDownBtn_1.Name = "DropDownBtn"
-DropDownBtn_1.Parent = DropDownTopHolder_1
-DropDownBtn_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
-DropDownBtn_1.BackgroundTransparency = 1
-DropDownBtn_1.BorderColor3 = Color3.fromRGB(0,0,0)
-DropDownBtn_1.BorderSizePixel = 0
-DropDownBtn_1.Position = UDim2.new(0.901818156, 0,0.166666672, 0)
-DropDownBtn_1.Rotation = -90
-DropDownBtn_1.Size = UDim2.new(0, 18,0, 18)
-DropDownBtn_1.Image = "rbxassetid://14610322704"
+			DropDownBtn_1.Name = "DropDownBtn"
+			DropDownBtn_1.Parent = DropDownTopHolder_1
+			DropDownBtn_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
+			DropDownBtn_1.BackgroundTransparency = 1
+			DropDownBtn_1.BorderColor3 = Color3.fromRGB(0,0,0)
+			DropDownBtn_1.BorderSizePixel = 0
+			DropDownBtn_1.Position = UDim2.new(0.901818156, 0,0.166666672, 0)
+			DropDownBtn_1.Rotation = -90
+			DropDownBtn_1.Size = UDim2.new(0, 18,0, 18)
+			DropDownBtn_1.Image = "rbxassetid://14610322704"
 
-DropDownText_1.Name = "DropDownText"
-DropDownText_1.Parent = DropDownTopHolder_1
-DropDownText_1.Active = true
-DropDownText_1.AnchorPoint = Vector2.new(0.5, 0.5)
-DropDownText_1.BackgroundColor3 = Color3.fromRGB(47,47,47)
-DropDownText_1.BackgroundTransparency = 0
-DropDownText_1.BorderColor3 = Color3.fromRGB(0,0,0)
-DropDownText_1.BorderSizePixel = 0
-DropDownText_1.Position = UDim2.new(0.229000002, 0,0.479999989, 0)
-DropDownText_1.Size = UDim2.new(0, 126,0, 29)
-DropDownText_1.Font = Enum.Font.GothamBold
-DropDownText_1.Text = dropdownData.Name or "Drop Down"
-DropDownText_1.TextColor3 = Color3.fromRGB(255,255,255)
-DropDownText_1.TextSize = 14
-DropDownText_1.TextXAlignment = Enum.TextXAlignment.Left
+			DropDownText_1.Name = "DropDownText"
+			DropDownText_1.Parent = DropDownTopHolder_1
+			DropDownText_1.Active = true
+			DropDownText_1.AnchorPoint = Vector2.new(0.5, 0.5)
+			DropDownText_1.BackgroundColor3 = Color3.fromRGB(47,47,47)
+			DropDownText_1.BackgroundTransparency = 0
+			DropDownText_1.BorderColor3 = Color3.fromRGB(0,0,0)
+			DropDownText_1.BorderSizePixel = 0
+			DropDownText_1.Position = UDim2.new(0.229000002, 0,0.479999989, 0)
+			DropDownText_1.Size = UDim2.new(0, 126,0, 29)
+			DropDownText_1.Font = Enum.Font.GothamBold
+			DropDownText_1.Text = dropdownData.Name or "Drop Down"
+			DropDownText_1.TextColor3 = Color3.fromRGB(255,255,255)
+			DropDownText_1.TextSize = 14
+			DropDownText_1.TextXAlignment = Enum.TextXAlignment.Left
 
-UIPadding_1.Parent = DropDownText_1
-UIPadding_1.PaddingLeft = UDim.new(0,8)
+			UIPadding_1.Parent = DropDownText_1
+			UIPadding_1.PaddingLeft = UDim.new(0,8)
 
-SelectedItemText_1.Name = "SelectedItemText"
-SelectedItemText_1.Parent = DropDownTopHolder_1
-SelectedItemText_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
-SelectedItemText_1.BackgroundTransparency = 1
-SelectedItemText_1.BorderColor3 = Color3.fromRGB(0,0,0)
-SelectedItemText_1.BorderSizePixel = 0
-SelectedItemText_1.Position = UDim2.new(0.48300001, 0,0.100000001, 0)
-SelectedItemText_1.Size = UDim2.new(0, 114,0, 23)
-SelectedItemText_1.Font = Enum.Font.Gotham
-SelectedItemText_1.Text = dropdownData.Default or "..."
-SelectedItemText_1.TextColor3 = Color3.fromRGB(255,255,255)
-SelectedItemText_1.TextSize = 12
-SelectedItemText_1.TextXAlignment = Enum.TextXAlignment.Right
+			SelectedItemText_1.Name = "SelectedItemText"
+			SelectedItemText_1.Parent = DropDownTopHolder_1
+			SelectedItemText_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
+			SelectedItemText_1.BackgroundTransparency = 1
+			SelectedItemText_1.BorderColor3 = Color3.fromRGB(0,0,0)
+			SelectedItemText_1.BorderSizePixel = 0
+			SelectedItemText_1.Position = UDim2.new(0.48300001, 0,0.100000001, 0)
+			SelectedItemText_1.Size = UDim2.new(0, 114,0, 23)
+			SelectedItemText_1.Font = Enum.Font.Gotham
+			SelectedItemText_1.Text = dropdownData.Default or "..."
+			SelectedItemText_1.TextColor3 = Color3.fromRGB(255,255,255)
+			SelectedItemText_1.TextSize = 12
+			SelectedItemText_1.TextXAlignment = Enum.TextXAlignment.Right
 
-UIPadding_2.Parent = SelectedItemText_1
-UIPadding_2.PaddingRight = UDim.new(0,7)
+			UIPadding_2.Parent = SelectedItemText_1
+			UIPadding_2.PaddingRight = UDim.new(0,7)
 
-Line_1.Name = "Line"
-Line_1.Parent = DropDownTopHolder_1
-Line_1.BackgroundColor3 = Color3.fromRGB(81,81,81)
-Line_1.BackgroundTransparency = 1
-Line_1.BorderColor3 = Color3.fromRGB(0,0,0)
-Line_1.BorderSizePixel = 0
-Line_1.Size = UDim2.new(0, 275,0, 30)
+			Line_1.Name = "Line"
+			Line_1.Parent = DropDownTopHolder_1
+			Line_1.BackgroundColor3 = Color3.fromRGB(81,81,81)
+			Line_1.BackgroundTransparency = 1
+			Line_1.BorderColor3 = Color3.fromRGB(0,0,0)
+			Line_1.BorderSizePixel = 0
+			Line_1.Size = UDim2.new(0, 275,0, 30)
 
-UICorner_2.Parent = Line_1
-UICorner_2.CornerRadius = UDim.new(0,6)
+			UICorner_2.Parent = Line_1
+			UICorner_2.CornerRadius = UDim.new(0,6)
 
-UIStroke_2.Parent = Line_1
-UIStroke_2.Color = Color3.fromRGB(81,81,81)
-UIStroke_2.Thickness = 1
+			UIStroke_2.Parent = Line_1
+			UIStroke_2.Color = Color3.fromRGB(81,81,81)
+			UIStroke_2.Thickness = 1
 
-ItemsFrameHolder_1.Name = "ItemsFrameHolder"
-ItemsFrameHolder_1.Parent = DropDownFrame
-ItemsFrameHolder_1.Visible = false
-ItemsFrameHolder_1.ClipsDescendants = true
-ItemsFrameHolder_1.AnchorPoint = Vector2.new(0.5, 0.5)
-ItemsFrameHolder_1.AutomaticSize = Enum.AutomaticSize.Y
-ItemsFrameHolder_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
-ItemsFrameHolder_1.BackgroundTransparency = 1
-ItemsFrameHolder_1.BorderColor3 = Color3.fromRGB(0,0,0)
-ItemsFrameHolder_1.BorderSizePixel = 0
-ItemsFrameHolder_1.Position = UDim2.new(0.5, 0,0.649999976, 0)
-ItemsFrameHolder_1.Size = UDim2.new(0, 275,0, 82)
-ItemsFrameHolder_1.SizeConstraint = Enum.SizeConstraint.RelativeYY
+			ItemsFrameHolder_1.Name = "ItemsFrameHolder"
+			ItemsFrameHolder_1.Parent = DropDownFrame
+			ItemsFrameHolder_1.Visible = false
+			ItemsFrameHolder_1.ClipsDescendants = true
+			ItemsFrameHolder_1.AnchorPoint = Vector2.new(0.5, 0.5)
+			ItemsFrameHolder_1.AutomaticSize = Enum.AutomaticSize.Y
+			ItemsFrameHolder_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
+			ItemsFrameHolder_1.BackgroundTransparency = 1
+			ItemsFrameHolder_1.BorderColor3 = Color3.fromRGB(0,0,0)
+			ItemsFrameHolder_1.BorderSizePixel = 0
+			ItemsFrameHolder_1.Position = UDim2.new(0.5, 0,0.649999976, 0)
+			ItemsFrameHolder_1.Size = UDim2.new(0, 275,0, 82)
+			ItemsFrameHolder_1.SizeConstraint = Enum.SizeConstraint.RelativeYY
 
-ItemsFrame_1.Name = "ItemsFrame"
-ItemsFrame_1.Parent = ItemsFrameHolder_1
-ItemsFrame_1.Active = true
-ItemsFrame_1.AnchorPoint = Vector2.new(0.5, 0.5)
-ItemsFrame_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
-ItemsFrame_1.BackgroundTransparency = 1
-ItemsFrame_1.BorderColor3 = Color3.fromRGB(0,0,0)
-ItemsFrame_1.BorderSizePixel = 0
-ItemsFrame_1.Position = UDim2.new(0.5, 0,0.5, 0)
-ItemsFrame_1.Size = UDim2.new(0, 275,0, 82)
-ItemsFrame_1.ClipsDescendants = true
-ItemsFrame_1.AutomaticCanvasSize = Enum.AutomaticSize.Y
-ItemsFrame_1.BottomImage = "rbxasset://textures/ui/Scroll/scroll-bottom.png"
-ItemsFrame_1.CanvasPosition = Vector2.new(0, 0)
-ItemsFrame_1.CanvasSize = UDim2.new(0, 0,0.5, 0)
-ItemsFrame_1.ElasticBehavior = Enum.ElasticBehavior.Never
-ItemsFrame_1.HorizontalScrollBarInset = Enum.ScrollBarInset.None
-ItemsFrame_1.MidImage = "rbxasset://textures/ui/Scroll/scroll-middle.png"
-ItemsFrame_1.ScrollBarImageColor3 = Color3.fromRGB(81,81,81)
-ItemsFrame_1.ScrollBarImageTransparency = 0
-ItemsFrame_1.ScrollBarThickness = 5
-ItemsFrame_1.ScrollingDirection = Enum.ScrollingDirection.XY
-ItemsFrame_1.TopImage = "rbxasset://textures/ui/Scroll/scroll-top.png"
-ItemsFrame_1.VerticalScrollBarInset = Enum.ScrollBarInset.None
-ItemsFrame_1.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
+			ItemsFrame_1.Name = "ItemsFrame"
+			ItemsFrame_1.Parent = ItemsFrameHolder_1
+			ItemsFrame_1.Active = true
+			ItemsFrame_1.AnchorPoint = Vector2.new(0.5, 0.5)
+			ItemsFrame_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
+			ItemsFrame_1.BackgroundTransparency = 1
+			ItemsFrame_1.BorderColor3 = Color3.fromRGB(0,0,0)
+			ItemsFrame_1.BorderSizePixel = 0
+			ItemsFrame_1.Position = UDim2.new(0.5, 0,0.5, 0)
+			ItemsFrame_1.Size = UDim2.new(0, 275,0, 82)
+			ItemsFrame_1.ClipsDescendants = true
+			ItemsFrame_1.AutomaticCanvasSize = Enum.AutomaticSize.Y
+			ItemsFrame_1.BottomImage = "rbxasset://textures/ui/Scroll/scroll-bottom.png"
+			ItemsFrame_1.CanvasPosition = Vector2.new(0, 0)
+			ItemsFrame_1.CanvasSize = UDim2.new(0, 0,0.5, 0)
+			ItemsFrame_1.ElasticBehavior = Enum.ElasticBehavior.Never
+			ItemsFrame_1.HorizontalScrollBarInset = Enum.ScrollBarInset.None
+			ItemsFrame_1.MidImage = "rbxasset://textures/ui/Scroll/scroll-middle.png"
+			ItemsFrame_1.ScrollBarImageColor3 = Color3.fromRGB(81,81,81)
+			ItemsFrame_1.ScrollBarImageTransparency = 0
+			ItemsFrame_1.ScrollBarThickness = 5
+			ItemsFrame_1.ScrollingDirection = Enum.ScrollingDirection.XY
+			ItemsFrame_1.TopImage = "rbxasset://textures/ui/Scroll/scroll-top.png"
+			ItemsFrame_1.VerticalScrollBarInset = Enum.ScrollBarInset.None
+			ItemsFrame_1.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
 
-OptionFrame_1.Name = "OptionFrame"
-OptionFrame_1.Parent = ItemsFrame_1
-OptionFrame_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
-OptionFrame_1.BackgroundTransparency = 1
-OptionFrame_1.BorderColor3 = Color3.fromRGB(0,0,0)
-OptionFrame_1.BorderSizePixel = 0
-OptionFrame_1.Size = UDim2.new(0, 276,0, 19)
+			OptionFrame_1.Name = "OptionFrame"
+			OptionFrame_1.Parent = ItemsFrame_1
+			OptionFrame_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
+			OptionFrame_1.BackgroundTransparency = 1
+			OptionFrame_1.BorderColor3 = Color3.fromRGB(0,0,0)
+			OptionFrame_1.BorderSizePixel = 0
+			OptionFrame_1.Size = UDim2.new(0, 276,0, 19)
 
-OptionButton_1.Name = "OptionButton"
-OptionButton_1.Parent = OptionFrame_1
-OptionButton_1.Active = true
-OptionButton_1.AnchorPoint = Vector2.new(0.5, 0.5)
-OptionButton_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
-OptionButton_1.BackgroundTransparency = 1
-OptionButton_1.BorderColor3 = Color3.fromRGB(0,0,0)
-OptionButton_1.BorderSizePixel = 0
-OptionButton_1.Position = UDim2.new(0.5, 0,0.5, 0)
-OptionButton_1.Size = UDim2.new(0, 276,0, 19)
-OptionButton_1.Font = Enum.Font.Gotham
-OptionButton_1.Text = "Options:"
-OptionButton_1.TextColor3 = Color3.fromRGB(255,255,255)
-OptionButton_1.TextSize = 11
-OptionButton_1.TextXAlignment = Enum.TextXAlignment.Left
+			OptionButton_1.Name = "OptionButton"
+			OptionButton_1.Parent = OptionFrame_1
+			OptionButton_1.Active = true
+			OptionButton_1.AnchorPoint = Vector2.new(0.5, 0.5)
+			OptionButton_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
+			OptionButton_1.BackgroundTransparency = 1
+			OptionButton_1.BorderColor3 = Color3.fromRGB(0,0,0)
+			OptionButton_1.BorderSizePixel = 0
+			OptionButton_1.Position = UDim2.new(0.5, 0,0.5, 0)
+			OptionButton_1.Size = UDim2.new(0, 276,0, 19)
+			OptionButton_1.Font = Enum.Font.Gotham
+			OptionButton_1.Text = "Options:"
+			OptionButton_1.TextColor3 = Color3.fromRGB(255,255,255)
+			OptionButton_1.TextSize = 11
+			OptionButton_1.TextXAlignment = Enum.TextXAlignment.Left
 
-UIPadding_3.Parent = OptionButton_1
-UIPadding_3.PaddingLeft = UDim.new(0,8)
-   
-    
+			UIPadding_3.Parent = OptionButton_1
+			UIPadding_3.PaddingLeft = UDim.new(0,8)
 
 
-UIListLayout_1.Parent = ItemsFrame_1
-UIListLayout_1.Padding = UDim.new(0,3)
-UIListLayout_1.SortOrder = Enum.SortOrder.LayoutOrder
-
-UIPadding_4.Parent = ItemsFrame_1
-UIPadding_4.PaddingBottom = UDim.new(0,3)
-UIPadding_4.PaddingTop = UDim.new(0,3)
-
-    local function ToggleDropdown()
-         local isExpanded = ItemsFrameHolder_1.Visible
-        local targetSize = isExpanded and UDim2.new(0, 275, 0, 30) or UDim2.new(0, 275, 0, 110)
-
-    local targetRotation = isExpanded and -90 or 90 -- Choose the target rotation based on expansion
-
-    if isExpanded then
-        ItemsFrameHolder_1.Visible = false
-    else
-        ItemsFrameHolder_1.Visible = true
-    end
-
-    local tweenInfo = TweenInfo.new(
-        0.2, -- Duration
-        Enum.EasingStyle.Quad, -- Easing style
-        Enum.EasingDirection.Out -- Easing direction
-    )
-
-    local sizeTween = TweenService:Create(
-        DropDownFrame,
-        tweenInfo,
-        {Size = targetSize}
-    )
-
-    local rotationTween = TweenService:Create(
-        DropDownBtn_1,
-        tweenInfo,
-        {Rotation = targetRotation}
-    )
-
-    sizeTween:Play()
-    rotationTween:Play()
-    end
-
-    local function CreateOptionButton(option)
-    if option == OptionButton_1.Text then
-        return -- Skip creating an option button for the default value
-    end
-    
-        local OptionButtonClone = OptionButton_1:Clone()
-        OptionButtonClone.Parent = ItemsFrame_1
-        OptionButtonClone.Text = option
-        OptionButtonClone.LayoutOrder = #ItemsFrame_1:GetChildren()
-        OptionButtonClone.MouseButton1Click:Connect(function()
-            SelectedItemText_1.Text = option
-            ToggleDropdown()
-            dropdownData.Callback(option) -- Call the provided callback function
-        end)
-    end
-
-    local function InitializeDropdown()
-        for _, option in ipairs(dropdownData.Options) do
-            CreateOptionButton(option)
-        end
-    end
-
-    InitializeDropdown() -- Call the InitializeDropdown function to set up the dropdown
-
-    DropDownBtn_1.MouseButton1Click:Connect(ToggleDropdown)
 
 
-end
+			UIListLayout_1.Parent = ItemsFrame_1
+			UIListLayout_1.Padding = UDim.new(0,3)
+			UIListLayout_1.SortOrder = Enum.SortOrder.LayoutOrder
+
+			UIPadding_4.Parent = ItemsFrame_1
+			UIPadding_4.PaddingBottom = UDim.new(0,3)
+			UIPadding_4.PaddingTop = UDim.new(0,3)
+
+			local function ToggleDropdown()
+				local isExpanded = ItemsFrameHolder_1.Visible
+				local targetSize = isExpanded and UDim2.new(0, 275, 0, 30) or UDim2.new(0, 275, 0, 110)
+
+				local targetRotation = isExpanded and -90 or 90 -- Choose the target rotation based on expansion
+
+				if isExpanded then
+					ItemsFrameHolder_1.Visible = false
+				else
+					ItemsFrameHolder_1.Visible = true
+				end
+
+				local tweenInfo = TweenInfo.new(
+					0.2, -- Duration
+					Enum.EasingStyle.Quad, -- Easing style
+					Enum.EasingDirection.Out -- Easing direction
+				)
+
+				local sizeTween = TweenService:Create(
+					DropDownFrame,
+					tweenInfo,
+					{Size = targetSize}
+				)
+
+				local rotationTween = TweenService:Create(
+					DropDownBtn_1,
+					tweenInfo,
+					{Rotation = targetRotation}
+				)
+
+				sizeTween:Play()
+				rotationTween:Play()
+			end
+
+			local function CreateOptionButton(option)
+				if option == OptionButton_1.Text then
+					return -- Skip creating an option button for the default value
+				end
+
+				local OptionButtonClone = OptionButton_1:Clone()
+				OptionButtonClone.Parent = ItemsFrame_1
+				OptionButtonClone.Text = option
+				OptionButtonClone.LayoutOrder = #ItemsFrame_1:GetChildren()
+				OptionButtonClone.MouseButton1Click:Connect(function()
+					SelectedItemText_1.Text = option
+					ToggleDropdown()
+					dropdownData.Callback(option) -- Call the provided callback function
+				end)
+			end
+
+			local function InitializeDropdown()
+				for _, option in ipairs(dropdownData.Options) do
+					CreateOptionButton(option)
+				end
+			end
+
+			InitializeDropdown() -- Call the InitializeDropdown function to set up the dropdown
+
+			DropDownBtn_1.MouseButton1Click:Connect(ToggleDropdown)
+
+
+		end
 
 		return Elements
 	end
